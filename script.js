@@ -10,7 +10,6 @@ const board = document.getElementById("board");
 const keyboard = document.getElementById("keyboard");
 const messageEl = document.getElementById("message");
 const subtitleEl = document.getElementById("subtitle");
-const shareBtn = document.getElementById("share");
 
 let mode = "daily";           // "daily" | "practice"
 let answer = "";
@@ -93,7 +92,6 @@ function resetState() {
   gameOver = false;
   won = false;
   keyStates = {};
-  shareBtn.hidden = true;
   clearMessage();
   buildBoard();
   buildKeyboard();
@@ -177,7 +175,6 @@ function commitGuess(word) {
 
 function endGame(restored = false) {
   endMessage();
-  shareBtn.hidden = false;
 }
 
 function endMessage() {
@@ -227,40 +224,6 @@ function updateKeyState(letter, state) {
   }
 }
 
-function buildShareText() {
-  const score = won ? guesses.length : "X";
-  const header = mode === "daily"
-    ? `Slovko · ${todayStr()} · ${score}/${ROWS}`
-    : `Slovko (cvičná) · ${score}/${ROWS}`;
-  const grid = guesses
-    .map((g) => g.result.map((s) =>
-      s === "correct" ? "🟩" : s === "present" ? "🟨" : "⬜").join(""))
-    .join("\n");
-  return header + "\n\n" + grid;
-}
-
-async function share() {
-  const text = buildShareText();
-  try {
-    await navigator.clipboard.writeText(text);
-    flash("Skopírované do schránky");
-  } catch (e) {
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    ta.style.position = "fixed";
-    ta.style.opacity = "0";
-    document.body.appendChild(ta);
-    ta.select();
-    try {
-      document.execCommand("copy");
-      flash("Skopírované do schránky");
-    } catch (e2) {
-      flash("Nepodarilo sa skopírovať");
-    }
-    ta.remove();
-  }
-}
-
 let flashTimer = null;
 
 function showMessage(text) {
@@ -295,6 +258,5 @@ document.querySelectorAll(".mode-btn").forEach((btn) =>
   btn.addEventListener("click", () =>
     btn.dataset.mode === "daily" ? startDaily() : startPractice())
 );
-shareBtn.addEventListener("click", share);
 
 startDaily();

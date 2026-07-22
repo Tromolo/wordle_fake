@@ -140,20 +140,6 @@ main {
 }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 
-#share {
-  background: var(--correct);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 12px 22px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-bottom: 8px;
-}
-#share:active { opacity: 0.8; }
-#share[hidden] { display: none; }
-
 #keyboard {
   width: 100%;
   display: flex;
