@@ -64,6 +64,7 @@ function startDaily() {
   mode = "daily";
   answer = dailyAnswer();
   resetState();
+  setActiveMode();
   subtitleEl.textContent = "Dnešné slovo · " + todayStr();
 
   const saved = loadDaily();
@@ -77,7 +78,13 @@ function startPractice() {
   mode = "practice";
   answer = ANSWERS[Math.floor(Math.random() * ANSWERS.length)];
   resetState();
-  subtitleEl.textContent = "Cvičná hra";
+  setActiveMode();
+  subtitleEl.textContent = "Cvičná hra · náhodné slovo";
+}
+
+function setActiveMode() {
+  document.querySelectorAll(".mode-btn").forEach((b) =>
+    b.classList.toggle("active", b.dataset.mode === mode));
 }
 
 function resetState() {
@@ -284,7 +291,10 @@ document.addEventListener("keydown", (e) => {
   else if (/^[a-zA-Z]$/.test(e.key)) handleKey(e.key.toLowerCase());
 });
 
-document.getElementById("new-game").addEventListener("click", startPractice);
+document.querySelectorAll(".mode-btn").forEach((btn) =>
+  btn.addEventListener("click", () =>
+    btn.dataset.mode === "daily" ? startDaily() : startPractice())
+);
 shareBtn.addEventListener("click", share);
 
 startDaily();
